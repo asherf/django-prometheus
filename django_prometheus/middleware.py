@@ -4,6 +4,9 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django_prometheus.conf import NAMESPACE
 from django_prometheus.utils import PowersOf, Time, TimeSince
+from prometheus_client.utils import INF
+from django_prometheus.utils import Time, TimeSince, PowersOf
+
 
 DEFAULT_LATENCY_BUCKETS = (
     0.01,
