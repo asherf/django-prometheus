@@ -30,8 +30,10 @@ class TestDbMetrics(BaseDbMetricTest):
         self.assertTrue('test_db_2' in connections.databases.keys())
 
     def testCounters(self):
-        cursor_db1 = connections['test_db_1'].cursor()
-        cursor_db2 = connections['test_db_2'].cursor()
+        c1 = connections['test_db_1']
+        c2 = connections['test_db_2']
+        cursor_db1 = c1.cursor()
+        cursor_db2 = c2.cursor()
         cursor_db1.execute('SELECT 1')
         for _ in range(200):
             cursor_db2.execute('SELECT 2')
