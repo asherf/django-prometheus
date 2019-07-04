@@ -6,33 +6,16 @@ python:
   - "3.7"
   - "3.8"
   - "2.7"
-env:
-  - DJANGO_VERSION=2.1
-  - DJANGO_VERSION=2.2
-  - DJANGO_VERSION=1.11
 services:
   - memcached
   - redis
   - mysql
   - postgresql
-matrix:
-  exclude:
-    - python: "2.7"
-      env: DJANGO_VERSION=2.1
-    - python: "2.7"
-      env: DJANGO_VERSION=2.2
-    - python: "3.8"
-      env: DJANGO_VERSION=1.11
-    - python: "3.7"
-      env: DJANGO_VERSION=1.11
-    - python: "3.6"
-      env: DJANGO_VERSION=1.11
 
 install:
-  - pip install -r requirements.txt
-  - pip install -q Django==$DJANGO_VERSION
+  - pip install tox-travis
   - mysql -e 'create database django_prometheus_1;'
+  
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == "3.7" ]]; then black --check django_prometheus/; fi
-  - python setup.py test
-  - cd django_prometheus/tests/end2end && PYTHONPATH=../../.. python manage.py test
+  - tox
+
