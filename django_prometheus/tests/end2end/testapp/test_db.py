@@ -77,6 +77,9 @@ class TestPostgresDbMetrics(BaseDbMetricTest):
     fragile. Consider asserting that the value exceeds a certain
     threshold, or check by how much it increased during the test.
     """
+
+    databases = '__all__'
+
     def testCounters(self):
         r = self.saveRegistry()
         cursor = connections['postgresql'].cursor()
