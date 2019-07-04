@@ -22,6 +22,8 @@ class TestDbMetrics(BaseDbMetricTest):
     fragile. Consider asserting that the value exceeds a certain
     threshold, or check by how much it increased during the test.
     """
+
+    databases = '__all__'
     def testConfigHasExpectedDatabases(self):
         """Not a real unit test: ensures that testapp.settings contains the
         databases this test expects."""
