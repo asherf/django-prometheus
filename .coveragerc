@@ -1,0 +1,3 @@
+[run]
+# moved unit test coverage file to e2e test folder, so the e2e tests will append to it
+data_file=django_prometheus/tests/end2end/.coverage

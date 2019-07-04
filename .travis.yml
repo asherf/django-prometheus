@@ -26,10 +26,13 @@ matrix:
       env: DJANGO_VERSION=1.11
 
 install:
+  - pip install coveralls
   - pip install -r requirements.txt
   - pip install -q Django==$DJANGO_VERSION
   - mysql -e 'create database django_prometheus_1;'
 script:
   - pycodestyle django_prometheus/.
-  - python setup.py test
+  - coverage run --source=django_prometheus setup.py test
   - cd django_prometheus/tests/end2end && PYTHONPATH=../../.. python manage.py test
+after_success:
+  - coveralls
