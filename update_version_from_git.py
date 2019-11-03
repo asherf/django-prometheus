@@ -18,7 +18,6 @@ Get the branch/tag name with this.
     git symbolic-ref -q --short HEAD || git describe --tags --exact-match
 """
 
-import io
 import os
 import re
 import subprocess
