@@ -64,6 +64,8 @@ def get_git_version_info():
     cmd = 'git describe --tags'
     ver_str = subprocess.check_output(cmd, shell=True)
     ver, commits_since, githash = ver_str.decode().strip().split('-')
+    if ver[0] == "v":
+        ver = ver[1:]
     return ver, commits_since, githash
 
 def prerelease_version():
