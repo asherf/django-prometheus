@@ -20,7 +20,7 @@ def T(metric_name):
 
 
 @override_settings(
-    PROMETHEUS_LATENCY_BUCKETS=(0.005, 1.0, 2.0, 4.0, 5.0, 10.0, float("inf"))
+    PROMETHEUS_LATENCY_BUCKETS=(0.05, 1.0, 2.0, 4.0, 5.0, 10.0, float("inf"))
 )
 class TestMiddlewareMetrics(PrometheusTestCaseMixin, SimpleTestCase):
     """Test django_prometheus.middleware.
@@ -113,7 +113,7 @@ class TestMiddlewareMetrics(PrometheusTestCaseMixin, SimpleTestCase):
             registry,
             0,
             M("requests_latency_seconds_by_view_method_bucket"),
-            le="0.005",
+            le="0.05",
             view="slow",
             method="GET",
         )
