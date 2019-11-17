@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 from django_prometheus.testutils import PrometheusTestCaseMixin
 from testapp.views import ObjectionException
 
@@ -19,6 +19,9 @@ def T(metric_name):
     return "%s_total" % M(metric_name)
 
 
+@override_settings(
+    PROMETHEUS_LATENCY_BUCKETS=(0.005, 1.0, 2.0, 4.0, 5.0, 10.0, float("inf"))
+)
 class TestMiddlewareMetrics(PrometheusTestCaseMixin, SimpleTestCase):
     """Test django_prometheus.middleware.
 
@@ -110,7 +113,7 @@ class TestMiddlewareMetrics(PrometheusTestCaseMixin, SimpleTestCase):
             registry,
             0,
             M("requests_latency_seconds_by_view_method_bucket"),
-            le="0.05",
+            le="0.005",
             view="slow",
             method="GET",
         )
@@ -134,7 +137,7 @@ class TestMiddlewareMetrics(PrometheusTestCaseMixin, SimpleTestCase):
             registry,
             2,
             M("requests_latency_seconds_by_view_method_bucket"),
-            le="0.05",
+            le="2.0",
             view="testapp.views.objection",
             method="GET",
         )
