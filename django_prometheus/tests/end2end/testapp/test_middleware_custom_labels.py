@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase, override_settings
+from django.test import TransactionTestCase, override_settings
 from django_prometheus.middleware import (
     Metrics,
     PrometheusAfterMiddleware,
@@ -9,8 +9,8 @@ from testapp.helpers import get_middleware
 from testapp.test_middleware import M, T
 
 EXTENDED_METRICS = [
-    "django_http_requests_latency_seconds_by_view_method",
-    "django_http_responses_total_by_status_view_method",
+    M("requests_latency_seconds_by_view_method"),
+    M("responses_total_by_status_view_method"),
 ]
 
 
@@ -19,7 +19,7 @@ class CustomMetrics(Metrics):
         self, metric_cls, name, documentation, labelnames=tuple(), **kwargs
     ):
         if name in EXTENDED_METRICS:
-            labelnames = labelnames + ("view_type", "user_agent_type")
+            labelnames.extend(("view_type", "user_agent_type"))
         return super(CustomMetrics, self).register_metric(
             metric_cls, name, documentation, labelnames=labelnames, **kwargs
         )
@@ -33,27 +33,22 @@ class AppMetricsAfterMiddleware(PrometheusAfterMiddleware):
     metrics_cls = CustomMetrics
 
     def label_metric(self, metric, request, response=None, **labels):
+        new_labels = labels
         if metric._name in EXTENDED_METRICS:
-            labels.update({"view_type": "foo", "user_agent_type": "browser"})
+            new_labels = {"view_type": "foo", "user_agent_type": "browser"}
+            new_labels.update(labels)
         return super(AppMetricsAfterMiddleware, self).label_metric(
-            metric, request, response=response, **labels
+            metric, request, response=response, **new_labels
         )
 
 
 @override_settings(
-    MIDDLEWARE_X=get_middleware(
+    MIDDLEWARE=get_middleware(
         "testapp.test_middleware_custom_labels.AppMetricsBeforeMiddleware",
         "testapp.test_middleware_custom_labels.AppMetricsAfterMiddleware",
     )
 )
-class TestMiddlewareMetricsWithCustomLabels(PrometheusTestCaseMixin, SimpleTestCase):
-    """Test django_prometheus.middleware.
-
-    Note that counters related to exceptions can't be tested as
-    Django's test Client only simulates requests and the exception
-    handling flow is very different in that simulation.
-    """
-
+class TestMiddlewareMetricsWithCustomLabels(PrometheusTestCaseMixin, TransactionTestCase):
     def test_request_counters(self):
         registry = self.saveRegistry()
         self.client.get("/")
@@ -99,6 +94,8 @@ class TestMiddlewareMetricsWithCustomLabels(PrometheusTestCaseMixin, SimpleTestC
             status="200",
             view="testapp.views.index",
             method="GET",
+            view_type="foo",
+            user_agent_type="browser",
         )
         self.assertMetricDiff(
             registry,
@@ -107,4 +104,6 @@ class TestMiddlewareMetricsWithCustomLabels(PrometheusTestCaseMixin, SimpleTestC
             status="200",
             view="testapp.views.help",
             method="GET",
+            view_type="foo",
+            user_agent_type="browser",
         )
