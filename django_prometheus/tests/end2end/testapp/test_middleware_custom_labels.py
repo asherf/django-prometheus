@@ -18,10 +18,12 @@ class CustomMetrics(Metrics):
     def register_metric(
         self, metric_cls, name, documentation, labelnames=tuple(), **kwargs
     ):
+        nlb = list(labelnames)
         if name in EXTENDED_METRICS:
-            labelnames.extend(("view_type", "user_agent_type"))
+            nlb.extend(("view_type", "user_agent_type"))
+        print(f"ASHER: register {name} with {nlb}")
         return super(CustomMetrics, self).register_metric(
-            metric_cls, name, documentation, labelnames=labelnames, **kwargs
+            metric_cls, name, documentation, labelnames=nlb, **kwargs
         )
 
 
