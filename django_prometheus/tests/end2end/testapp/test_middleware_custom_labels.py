@@ -19,12 +19,17 @@ class CustomMetrics(Metrics):
         self, metric_cls, name, documentation, labelnames=tuple(), **kwargs
     ):
         nlb = list(labelnames)
+        ext1 = False
         if name in EXTENDED_METRICS:
             nlb.extend(("view_type", "user_agent_type"))
+            ext1 = True
         print(f"ASHER: register {name} with {nlb}")
-        return super(CustomMetrics, self).register_metric(
+        mt = super(CustomMetrics, self).register_metric(
             metric_cls, name, documentation, labelnames=nlb, **kwargs
         )
+        if ext1:
+            mt._custom_stuff = nlb
+        return mt
 
 
 class AppMetricsBeforeMiddleware(PrometheusBeforeMiddleware):
@@ -39,7 +44,8 @@ class AppMetricsAfterMiddleware(PrometheusAfterMiddleware):
         if metric._name in EXTENDED_METRICS:
             new_labels = {"view_type": "foo", "user_agent_type": "browser"}
             new_labels.update(labels)
-            print(f"ASHER: Add labels {new_labels} - {metric._name} - {metric._labelnames}")
+            cx  = getattr(metric, "_custom_stuff", "NA")
+            print(f"ASHER: Add labels {new_labels} - {metric._name} - {metric._labelnames} -- {cx}")
         else:
             print(f"ASHER: same labels {metric._name} == {labels} - {metric._labelnames}")
         return super(AppMetricsAfterMiddleware, self).label_metric(
