@@ -31,6 +31,7 @@ class Metrics:
     @classmethod
     def get_instance(cls):
         if not cls._instance:
+            print("ASHER: NEW INSTANCE OF %s" % cls)
             cls._instance = cls()
         return cls._instance
 
@@ -171,6 +172,7 @@ class PrometheusBeforeMiddleware(MiddlewareMixin):
 
     def __init__(self, get_response=None):
         super(PrometheusBeforeMiddleware, self).__init__(get_response)
+        print("ASHER: BEFORE METRICS CLS %s" % self.metrics_cls)
         self.metrics = self.metrics_cls.get_instance()
 
     def process_request(self, request):
@@ -195,6 +197,7 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
 
     def __init__(self, get_response=None):
         super(PrometheusAfterMiddleware, self).__init__(get_response)
+        print("AFTER: BEFORE METRICS CLS %s" % self.metrics_cls)
         self.metrics = self.metrics_cls.get_instance()
 
     def _transport(self, request):

@@ -19,7 +19,8 @@ class CustomMetrics(Metrics):
         self, metric_cls, name, documentation, labelnames=tuple(), **kwargs
     ):
         nlb = list(labelnames)
-        ext1 = False
+        
+        ext1 = list(False)
         if name in EXTENDED_METRICS:
             nlb.extend(("view_type", "user_agent_type"))
             ext1 = True
