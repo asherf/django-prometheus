@@ -37,9 +37,9 @@ class AppMetricsAfterMiddleware(PrometheusAfterMiddleware):
         if metric._name in EXTENDED_METRICS:
             new_labels = {"view_type": "foo", "user_agent_type": "browser"}
             new_labels.update(labels)
-            print(f"ASHER: Add labels {new_labels} - {metric._name}")
+            print(f"ASHER: Add labels {new_labels} - {metric._name} - {metric._labelnames}")
         else:
-            print(f"ASHER: same labels {metric._name} == {labels}")
+            print(f"ASHER: same labels {metric._name} == {labels} - {metric._labelnames}")
         return super(AppMetricsAfterMiddleware, self).label_metric(
             metric, request, response=response, **new_labels
         )
