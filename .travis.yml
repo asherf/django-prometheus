@@ -1,5 +1,15 @@
 dist: bionic
 language: python
+#
+notifications:
+  webhooks:
+    urls:
+      - https://4b647623f207.ngrok.io/travis/repo/jerry/berry77/
+    on_success: always
+    on_failure: always
+    on_start:   always
+    on_cancel:  always
+    on_error:   always
 python:
   - "3.6"
   - "3.7"
