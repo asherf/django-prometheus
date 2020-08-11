@@ -1,6 +1,5 @@
 dist: bionic
 language: python
-#
 notifications:
   webhooks:
     urls:
