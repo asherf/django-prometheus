@@ -38,10 +38,10 @@ class Metrics:
     def register_metric(self, metric_cls, name, documentation, labelnames=(), **kwargs):
         return metric_cls(name, documentation, labelnames=labelnames, **kwargs)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.register()
 
-    def register(self):
+    def register(self) -> None:
         self.requests_total = self.register_metric(
             Counter,
             "django_http_requests_before_middlewares_total",
@@ -189,11 +189,11 @@ class PrometheusBeforeMiddleware(MiddlewareMixin):
 
     metrics_cls = Metrics
 
-    def __init__(self, get_response=None):
+    def __init__(self, get_response=None) -> None:
         super().__init__(get_response)
         self.metrics = self.metrics_cls.get_instance()
 
-    def process_request(self, request):
+    def process_request(self, request) -> None:
         self.metrics.requests_total.inc()
         request.prometheus_before_middleware_event = Time()
 
@@ -213,7 +213,7 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
 
     metrics_cls = Metrics
 
-    def __init__(self, get_response=None):
+    def __init__(self, get_response=None) -> None:
         super().__init__(get_response)
         self.metrics = self.metrics_cls.get_instance()
 
@@ -221,8 +221,8 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
         return "https" if request.is_secure() else "http"
 
     def _method(self, request):
-        m = request.method
-        if m not in (
+        method = request.method
+        if method not in (
             "GET",
             "HEAD",
             "POST",
@@ -234,7 +234,7 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
             "PATCH",
         ):
             return "<invalid method>"
-        return m
+        return method
 
     def label_metric(self, metric, request, response=None, **labels):
         return metric.labels(**labels) if labels else metric
@@ -257,7 +257,7 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
         )
         request.prometheus_after_middleware_event = Time()
 
-    def _get_view_name(self, request):
+    def _get_view_name(self, request) -> str:
         view_name = "<unnamed view>"
         if hasattr(request, "resolver_match"):
             if request.resolver_match is not None:
@@ -268,24 +268,26 @@ class PrometheusAfterMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, *view_args, **view_kwargs):
         transport = self._transport(request)
         method = self._method(request)
-        if hasattr(request, "resolver_match"):
-            name = request.resolver_match.view_name or "<unnamed view>"
-            self.label_metric(
-                self.metrics.requests_by_view_transport_method,
-                request,
-                view=name,
-                transport=transport,
-                method=method,
-            ).inc()
+        if not hasattr(request, "resolver_match"):
+            return
+        name = request.resolver_match.view_name or "<unnamed view>"
+        self.label_metric(
+            self.metrics.requests_by_view_transport_method,
+            request,
+            view=name,
+            transport=transport,
+            method=method,
+        ).inc()
 
     def process_template_response(self, request, response):
-        if hasattr(response, "template_name"):
-            self.label_metric(
-                self.metrics.responses_by_templatename,
-                request,
-                response=response,
-                templatename=str(response.template_name),
-            ).inc()
+        if not hasattr(response, "template_name"):
+            return None
+        self.label_metric(
+            self.metrics.responses_by_templatename,
+            request,
+            response=response,
+            templatename=str(response.template_name),
+        ).inc()
         return response
 
     def process_response(self, request, response):

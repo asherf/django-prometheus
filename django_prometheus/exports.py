@@ -49,15 +49,15 @@ def SetupPrometheusEndpointOnPort(port, addr=""):
 class PrometheusEndpointServer(threading.Thread):
     """A thread class that holds an http and makes it serve_forever()."""
 
-    def __init__(self, httpd, *args, **kwargs):
+    def __init__(self, httpd, *args, **kwargs) -> None:
         self.httpd = httpd
         super().__init__(*args, **kwargs)
 
-    def run(self):
+    def run(self) -> None:
         self.httpd.serve_forever()
 
 
-def SetupPrometheusEndpointOnPortRange(port_range, addr=""):
+def SetupPrometheusEndpointOnPortRange(port_range, addr="") -> None:
     """Like SetupPrometheusEndpointOnPort, but tries several ports.
 
     This is useful when you're running Django as a WSGI application
@@ -97,10 +97,9 @@ def SetupPrometheusEndpointOnPortRange(port_range, addr=""):
     logger.warning(
         "Cannot export Prometheus /metrics/ - " "no available ports in supplied range"
     )
-    return None
 
 
-def SetupPrometheusExportsFromConfig():
+def SetupPrometheusExportsFromConfig() -> None:
     """Exports metrics so Prometheus can collect them."""
     port = getattr(settings, "PROMETHEUS_METRICS_EXPORT_PORT", None)
     port_range = getattr(settings, "PROMETHEUS_METRICS_EXPORT_PORT_RANGE", None)
@@ -111,7 +110,7 @@ def SetupPrometheusExportsFromConfig():
         SetupPrometheusEndpointOnPort(port, addr)
 
 
-def ExportToDjangoView(request):
+def ExportToDjangoView(request) -> HttpResponse:
     """Exports /metrics as a Django view.
 
     You can use django_prometheus.urls to map /metrics to this view.
