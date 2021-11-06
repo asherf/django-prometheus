@@ -57,7 +57,7 @@ jobs:
       env:
         MYSQL_TCP_PORT: 3306
         MYSQL_HOST: mysql
-        PGHOST: locahost
+        PGHOST: localhost
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
