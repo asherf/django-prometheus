@@ -16,7 +16,7 @@ jobs:
         python-version: ["3.7"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    container: "python:${{ matrix.python-version }}"
+    # container: "python:${{ matrix.python-version }}"
     name: "${{ matrix.os }} Python: ${{ matrix.python-version }}"
     services:
       # redis:
@@ -49,15 +49,15 @@ jobs:
       run: |
         python --version
         pip --version
-    - name: Install db clients
-      run: |
-        apt-get update
-        apt-get install -y  mariadb-client-10.5 postgresql-client-13
+    # - name: Install db clients
+    #   run: |
+    #     apt-get update
+    #     apt-get install -y  mariadb-client-10.5 postgresql-client-13
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
         MYSQL_HOST: mysql
-        PGHOST: postgresql
+        PGHOST: 127.0.0.1
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
