@@ -23,6 +23,9 @@ jobs:
         image: memcached:1.6.12-alpine3.14
       mysql:
         image: mysql
+        ports:
+          - 3306:3306
+          # - 33060:33060
       postgresql:
         image: postgres:9.5.25
     steps:
@@ -43,6 +46,8 @@ jobs:
         python --version
         pip --version
     - name: prep DB
+      env:
+        MYSQL_TCP_PORT: 3306
       run: |
         mysql -e 'create database django_prometheus_1;'
         psql -U postgres -c 'CREATE DATABASE postgis'
