@@ -68,6 +68,6 @@ jobs:
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        mysql --host localhost -e 'create database django_prometheus_1;'
+        mysql --protocol=TCP --host=localhost -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
