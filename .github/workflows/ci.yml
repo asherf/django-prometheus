@@ -20,11 +20,11 @@ jobs:
       redis:
         image: redis
       memcached:
-        image: memcached
+        image: memcached:1.6.12-alpine3.14
       mysql:
         image: mysql
       postgresql:
-        image: postgresql
+        image: postgres:9.5.25
     steps:
     - uses: actions/checkout@v2
       with:
