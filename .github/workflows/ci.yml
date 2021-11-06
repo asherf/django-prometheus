@@ -48,6 +48,8 @@ jobs:
       run: |
         python --version
         pip --version
+    - name: Install db clients
+      run: sudo apt-get install -y mysql-shell
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
