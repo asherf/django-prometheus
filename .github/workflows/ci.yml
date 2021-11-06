@@ -23,10 +23,12 @@ jobs:
       #   image: redis
       # memcached:
       #   image: memcached:1.6.12-alpine3.14
-      # mysql:
-      #   image: mysql:8.0.27
-      #   ports:
-      #     - 3306
+      mysql:
+        image: mysql:8.0.27
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 3306
       postgresql:
         image: postgres:14.0
         env:
@@ -56,16 +58,15 @@ jobs:
     # - name: Install db clients
     #   run: |
     #     apt-get update
-    #     apt-get install -y  mariadb-client-10.5 postgresql-client-13
+    #     apt-get install postgresql-14-postgis-scripts
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
-        MYSQL_HOST: mysql
+        MYSQL_HOST: localhost
         PGHOST: localhost
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        psql -U postgres postgis -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
         mysql -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
