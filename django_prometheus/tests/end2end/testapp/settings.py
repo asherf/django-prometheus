@@ -75,7 +75,7 @@ DATABASES = {
     "mysql": {
         "ENGINE": "django_prometheus.db.backends.mysql",
         "NAME": "django_prometheus_1",
-        "USER": "travis",
+        "USER": "root",
         "PASSWORD": "",
         "HOST": "localhost",
         "PORT": "3306",
