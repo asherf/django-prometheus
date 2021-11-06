@@ -62,12 +62,12 @@ jobs:
     #     apt-get install postgresql-14-postgis-scripts
     - name: prep DB
       env:
-        MYSQL_TCP_PORT: 3306
-        MYSQL_HOST: localhost
+        # MYSQL_TCP_PORT: 3306
+        # MYSQL_HOST: localhost
         PGHOST: localhost
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        mysql -e 'create database django_prometheus_1;'
+        mysql --host localhost -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
