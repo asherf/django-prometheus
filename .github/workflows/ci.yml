@@ -16,13 +16,16 @@ jobs:
         python-version: ["3.7"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    # container: "python:${{ matrix.python-version }}"
     name: "${{ matrix.os }} Python: ${{ matrix.python-version }}"
     services:
-      # redis:
-      #   image: redis
-      # memcached:
-      #   image: memcached:1.6.12-alpine3.14
+      redis:
+        image: redis:6.2.6
+        ports:
+          - 6379:6379
+      memcached:
+        image: memcached:1.6.12
+        ports:
+          - 11211:11211
       mysql:
         image: mysql:8.0.27
         env:
@@ -47,11 +50,11 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    # - name: Install dependencies
-    #   run: |
-    #     pip install -U "pip>=21.1"
-    #     pip install -U setuptools
-    #     pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
+    - name: Install dependencies
+      run: |
+        pip install -U "pip>=21.1"
+        pip install -U setuptools
+        pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
     - name: Log versions
       run: |
         python --version
