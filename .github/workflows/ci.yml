@@ -12,8 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # python-version: ["3.6", "3.7", "3.8"]
-        python-version: ["3.7"]
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     name: "${{ matrix.os }} Python: ${{ matrix.python-version }}"
@@ -33,7 +32,6 @@ jobs:
         ports:
           - 3306:3306
       postgresql:
-        # image: postgres:14.0
         image: postgis/postgis:14-master
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
