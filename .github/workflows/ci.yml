@@ -59,8 +59,8 @@ jobs:
         PGHOST: postgres
         PGPORT: 5432
       run: |
-        mysql -e 'create database django_prometheus_1;'
         psql -U postgres -c 'CREATE DATABASE postgis'
         psql -U postgres postgis -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
+        mysql -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
