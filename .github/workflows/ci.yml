@@ -29,6 +29,8 @@ jobs:
       #     - 3306
       postgresql:
         image: postgres:13.4
+        env:
+           POSTGRES_PASSWORD: propane
         # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5435:5432
