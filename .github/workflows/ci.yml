@@ -16,6 +16,7 @@ jobs:
         python-version: ["3.7"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    container: "python:${{ matrix.python-version }}"
     name: "${{ matrix.os }} Python: ${{ matrix.python-version }}"
     services:
       redis:
@@ -43,10 +44,10 @@ jobs:
     #     pip install -U "pip>=21.1"
     #     pip install -U setuptools
     #     pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
-    # - name: Log python & pip versions
-    #   run: |
-    #     python --version
-    #     pip --version
+    - name: Log python & pip versions
+      run: |
+        python --version
+        pip --version
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
