@@ -25,9 +25,10 @@ jobs:
         image: mysql
         ports:
           - 3306:3306
-          # - 33060:33060
       postgresql:
         image: postgres:9.5.25
+        ports:
+          - 5432:5432
     steps:
     - uses: actions/checkout@v2
       with:
@@ -36,18 +37,21 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        pip install -U "pip>=21.1"
-        pip install -U setuptools
-        pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
-    - name: Log python & pip versions
-      run: |
-        python --version
-        pip --version
+    # - name: Install dependencies
+    #   run: |
+    #     pip install -U "pip>=21.1"
+    #     pip install -U setuptools
+    #     pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
+    # - name: Log python & pip versions
+    #   run: |
+    #     python --version
+    #     pip --version
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
+        MYSQL_HOST: mysql
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: 5432
       run: |
         mysql -e 'create database django_prometheus_1;'
         psql -U postgres -c 'CREATE DATABASE postgis'
