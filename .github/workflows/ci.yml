@@ -28,7 +28,7 @@ jobs:
       #   ports:
       #     - 3306
       postgresql:
-        image: postgres:13.4
+        image: postgres:14.0
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
           # POSTGRES_PASSWORD: propane
@@ -61,7 +61,7 @@ jobs:
       env:
         MYSQL_TCP_PORT: 3306
         MYSQL_HOST: mysql
-        PGHOST: 127.0.0.1
+        PGHOST: localhost
         PGPORT: 5435
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
