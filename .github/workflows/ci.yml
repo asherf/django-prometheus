@@ -73,5 +73,7 @@ jobs:
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
         mysql --protocol=TCP --user=root -e 'create database django_prometheus_1;'
+    - name: TOX debug
+      run: tox --listenvs-all
     - name: Run unit tests
       run: tox
