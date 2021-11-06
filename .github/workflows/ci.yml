@@ -34,7 +34,7 @@ jobs:
           # POSTGRES_PASSWORD: propane
         # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
-          - 5435:5432
+          - 5432:5432
     steps:
     - uses: actions/checkout@v2
       with:
@@ -62,7 +62,7 @@ jobs:
         MYSQL_TCP_PORT: 3306
         MYSQL_HOST: mysql
         PGHOST: localhost
-        PGPORT: 5435
+        PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
         psql -U postgres postgis -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
