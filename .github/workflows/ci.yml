@@ -65,11 +65,10 @@ jobs:
       env:
         MYSQL_TCP_PORT: 3306
         MYSQL_HOST: localhost
-        USER: ghtest
         PGHOST: localhost
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        mysql --protocol=TCP -e 'create database django_prometheus_1;'
+        mysql --protocol=TCP --user=ghtest -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
