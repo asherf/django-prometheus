@@ -23,13 +23,13 @@ jobs:
       #   image: redis
       # memcached:
       #   image: memcached:1.6.12-alpine3.14
-      mysql:
-        image: mysql:8.0.27
-        ports:
-          - 3306
+      # mysql:
+      #   image: mysql:8.0.27
+      #   ports:
+      #     - 3306
       postgresql:
         image: postgres:13.4
-        # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
     steps:
