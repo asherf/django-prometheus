@@ -48,10 +48,11 @@ jobs:
     #     pip install -U "pip>=21.1"
     #     pip install -U setuptools
     #     pip install -U "tox>=3.23.0,<4" codecov tox-gh-actions coverage
-    - name: Log python & pip versions
+    - name: Log versions
       run: |
         python --version
         pip --version
+        psql -V
     # - name: Install db clients
     #   run: |
     #     apt-get update
