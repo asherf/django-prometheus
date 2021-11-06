@@ -27,7 +27,7 @@ jobs:
         image: mysql:8.0.27
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_USER: ghtest
+          # MYSQL_USER: ghtest
         ports:
           - 3306:3306
       postgresql:
@@ -69,6 +69,6 @@ jobs:
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        mysql --protocol=TCP --user=ghtest -e 'create database django_prometheus_1;'
+        mysql --protocol=TCP --user='root'@'localhost' -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
