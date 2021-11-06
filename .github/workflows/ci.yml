@@ -24,11 +24,11 @@ jobs:
       # memcached:
       #   image: memcached:1.6.12-alpine3.14
       mysql:
-        image: mysql
+        image: mysql:8.0.27
         ports:
           - 3306
       postgresql:
-        image: postgres:9.5.25
+        image: postgres:13.4
         ports:
           - 5432
     steps:
@@ -49,7 +49,7 @@ jobs:
         python --version
         pip --version
     - name: Install db clients
-      run: apt-get install -y mysql-shell
+      run: apt-get install -y  mariadb-client-10.5 postgresql-client-13
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
