@@ -77,7 +77,7 @@ DATABASES = {
         "NAME": "django_prometheus_1",
         "USER": "root",
         "PASSWORD": "",
-        "HOST": "localhost",
+        "HOST": "127.0.0.1",
         "PORT": "3306",
     },
     # The following databases are used by test_db.py only
