@@ -28,9 +28,10 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
-          - 3306
+          - 3306:3306
       postgresql:
-        image: postgres:14.0
+        # image: postgres:14.0
+        image: postgis/postgis:14-master
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
           # POSTGRES_PASSWORD: propane
