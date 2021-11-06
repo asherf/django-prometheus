@@ -12,8 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # python-version: ["3.6", "3.7", "3.8"]
-        python-version: ["3.7"]
+        python-version: ["3.6", "3.7", "3.8"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     name: "${{ matrix.os }} Python: ${{ matrix.python-version }}"
@@ -30,7 +29,6 @@ jobs:
         image: mysql:8.0.27
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          # MYSQL_USER: ghtest
         ports:
           - 3306:3306
       postgresql:
@@ -38,8 +36,6 @@ jobs:
         # image: postgis/postgis:14-master
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
-          # POSTGRES_PASSWORD: propane
-        # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
     steps:
@@ -60,10 +56,7 @@ jobs:
         python --version
         pip --version
         psql -V
-    # - name: Install db clients
-    #   run: |
-    #     apt-get update
-    #     apt-get install postgresql-14-postgis-scripts
+        mysql -V
     - name: prep DB
       env:
         MYSQL_TCP_PORT: 3306
