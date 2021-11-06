@@ -72,3 +72,7 @@ jobs:
       run: tox --listenvs-all
     - name: Run unit tests
       run: tox
+    - name: Process code coverage
+      run: |
+        coverage combine .coverage django_prometheus/tests/end2end/.coverage
+        coverage xml
