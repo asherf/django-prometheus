@@ -27,6 +27,7 @@ jobs:
         image: mysql:8.0.27
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_USER: ghtest
         ports:
           - 3306:3306
       postgresql:
@@ -62,12 +63,13 @@ jobs:
     #     apt-get install postgresql-14-postgis-scripts
     - name: prep DB
       env:
-        # MYSQL_TCP_PORT: 3306
-        # MYSQL_HOST: localhost
+        MYSQL_TCP_PORT: 3306
+        MYSQL_HOST: localhost
+        USER: ghtest
         PGHOST: localhost
         PGPORT: 5432
       run: |
         psql -U postgres -c 'CREATE DATABASE postgis'
-        mysql --protocol=TCP --host=localhost -e 'create database django_prometheus_1;'
+        mysql --protocol=TCP -e 'create database django_prometheus_1;'
     - name: Run unit tests
       run: tox
